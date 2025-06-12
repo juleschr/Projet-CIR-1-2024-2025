@@ -1,0 +1,1 @@
+gcc main.h main.c
