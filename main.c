@@ -17,11 +17,11 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    //fprintf(file, "This is a new file created by the create program.\n");
     char line[LINE_SIZE];
     if(fgets(line, sizeof(line), file)) {
         printf("Reading the line %s", line);
     }
+    
     fclose(file);
     return EXIT_SUCCESS;
 }
