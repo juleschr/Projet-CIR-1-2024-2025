@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "functions.h"
 #define LINE_SIZE 512
 
 int main(int argc, char *argv[]) {
@@ -18,8 +19,17 @@ int main(int argc, char *argv[]) {
     }
 
     char line[LINE_SIZE];
-    if(fgets(line, sizeof(line), file)) {
-        printf("Reading the line %s", line);
+    while(fgets(line, sizeof(line), file)) {
+        //printf("Reading the line %s", line);
+
+        char chapter_id[100];
+        char chapter_title[100];
+        int p = is_new_chapter(line ,chapter_id, chapter_title);
+        if (p) {
+            printf("New chapter detected: %s", line);
+            printf("Chapter ID: %s\n", chapter_id);
+            printf("Chapter Title: %s\n", chapter_title);
+        }
     }
     
     fclose(file);
