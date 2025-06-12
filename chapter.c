@@ -20,7 +20,7 @@ void read_chapter(const char* file_name){
             char title[512];
             sscanf(line,"<chapter id\"%d\">%[^>]s",&id,title); // extrait l'id et le titre de la balise chapter
             printf("%d",id);
-            printf("%d")
+            printf("%d");
         }
     }
 
@@ -28,10 +28,4 @@ void read_chapter(const char* file_name){
 
 void chapter_htlm(filename){
     /*LALALAND*/
-}
-
-
-main(){
-    const char* filename =book.txt;
-    read_chapter(filename);
 }
