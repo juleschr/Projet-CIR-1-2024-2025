@@ -16,8 +16,8 @@ void lire_p(const char* filename){
     
     while(fgets(line, sizeof(line), file)){    // ...
         if(strstr("<p>",line)){ // verifie si la ligne contient la balise p
-            char texte[512];
-            sscanf(line,"<chapter id\"%d\">%[^>]s",texte); // extrait l'id et le titre de la balise chapter
+            char txt[512];
+            sscanf(line,"<chapter id\"%d\">%[^>]s",txt); // extrait l'id et le titre de la balise chapter
         }
     }
 
@@ -29,9 +29,9 @@ void afficher_p(const char* txt) {
     printf("<p>");
     for (size_t i = 0; txt[i]; ++i) {
         if (txt[i] == '\n') {
-            putchar(' ');
+            putchar(' '); // permet d'afficher les espace 
         } else {
-            putchar(txt[i]);
+            putchar(txt[i]); // affiche le texte dans la balise p
         }
     }
     printf("</p>\n");
@@ -39,9 +39,16 @@ void afficher_p(const char* txt) {
 
 // Utilisation
 void get_p(const char* filename) {
-    char* texte = lire_fichier(filename);
-    if (texte) {
-        afficher_p(texte);
-        free(texte);
+    char* txt = lire_fichier(filename);
+    if (txt) {
+        afficher_p(txt);
+        free(txt);
     }
+}
+
+
+int main(){
+    // Remplacez "votre_fichier.txt" par le nom de votre fichier à tester
+    get_p("book.txt");
+    return 0;
 }

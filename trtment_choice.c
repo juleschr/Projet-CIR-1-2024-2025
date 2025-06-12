@@ -3,4 +3,4 @@
 #include <string.h>
 #include <stdbool.h>
 
-
+void lire_choice(){}
