@@ -12,16 +12,26 @@ void read_chapter(const char* file_name){
         return;
     }
     
-    bool in_chapter = true;
-    
     char line[LINE_SIZE];
-    while(fgets(line, sizeof(line), file)){    // verifie si la ligne contient la balise chapter 
-        if(strstr("<chapter id",line)){
+    
+    while(fgets(line, sizeof(line), file)){    // ...
+        if(strstr("<chapter id",line)){ // verifie si la ligne contient la balise chapter
             int id = 0;
             char title[512];
-            sscanf(line,"<chapter id\"%d\">%[^>]s",id,title);
+            sscanf(line,"<chapter id\"%d\">%[^>]s",&id,title); // extrait l'id et le titre de la balise chapter
             printf("%d",id);
+            printf("%d")
         }
     }
 
+}
+
+void chapter_htlm(filename){
+    /*LALALAND*/
+}
+
+
+main(){
+    const char* filename =book.txt;
+    read_chapter(filename);
 }
