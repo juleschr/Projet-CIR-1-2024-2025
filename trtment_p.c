@@ -6,18 +6,19 @@
 
 
 void lire_p(const char* filename){
-    FILE* file = fopen(filename, "r");
-    if(!file){
+    FILE* file = fopen(filename, "r"); // ouvre le fichier 
+    if(!file){   
+        // verifie si le fichier n'est pas vide ou corompue 
         perror("error while file's opening");
         return;
     }
     
     char line[512];
     
-    while(fgets(line, sizeof(line), file)){    // ...
+    while(fgets(line, sizeof(line), file)){    // tant que l'on lis bien la ligne <p>
         if(strstr("<p>",line)){ // verifie si la ligne contient la balise p
             char txt[512];
-            sscanf(line,"<chapter id\"%d\">%[^>]s",txt); // extrait l'id et le titre de la balise chapter
+            sscanf(line,"<p\"%d\">%[^>]s",txt); // extrait l'id et le titre de la balise chapter
         }
     }
 
@@ -29,26 +30,40 @@ void afficher_p(const char* txt) {
     printf("<p>");
     for (size_t i = 0; txt[i]; ++i) {
         if (txt[i] == '\n') {
-            putchar(' '); // permet d'afficher les espace 
+            putchar(' ');
         } else {
-            putchar(txt[i]); // affiche le texte dans la balise p
+            putchar(txt[i]);
         }
     }
     printf("</p>\n");
 }
 
-// Utilisation
+// Extrait et affiche le texte entre <p> et </p>
 void get_p(const char* filename) {
-    char* txt = lire_fichier(filename);
-    if (txt) {
-        afficher_p(txt);
-        free(txt);
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        perror("error while file's opening");
+        return;
     }
+    char line[512];
+    while (fgets(line, sizeof(line), file)) {
+        char* start = strstr(line, "<p>");
+        char* end = strstr(line, "</p>");
+        if (start && end && end > start) {
+            start += 3; // avance après <p>
+            char contenu[1024];
+            size_t len = end - start;
+            strncpy(contenu, start, len);
+            contenu[len] = '\0';
+            afficher_p(contenu);
+        }
+    }
+    fclose(file);
 }
 
 
 int main(){
-    // Remplacez "votre_fichier.txt" par le nom de votre fichier à tester
+
     get_p("book.txt");
     return 0;
 }
