@@ -31,96 +31,60 @@ void end_chapter(FILE* file) {
         //printf("Chapter file closed successfully.\n");
     }
 }
-/*
-FILE* start_chapter(const char* chapter_id, const char* chapter_title) {
-    printf("Start chapter function began\n");
-    // Crée le nom du fichier ex: "01.html"
-    char filename[64];
-    printf("%s\n", chapter_id);
-    snprintf(filename, sizeof(filename), "%s.html", chapter_id);
 
-    //Ouvre le fichier en écriture
-    FILE* file = fopen(filename, "w");
-    if (file == NULL) {
-        fprintf(stderr, "Erreur : impossible de créer le fichier %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
-
-    //ecrit l'en-tête HTML standard avec un lien CSS
-    fprintf(file,
-        "<!DOCTYPE html>\n"
-        "<html lang=\"fr\">\n"
-        "<head>\n"
-        "  <meta charset=\"UTF-8\">\n"
-        "  <title>%s</title>\n"
-        "  <link rel=\"stylesheet\" href=\"style.css\">\n"
-        "</head>\n"
-        "<body>\n"
-        "  <h1>%s</h1>\n",
-        chapter_title, chapter_title
-    );
-    //printf("Chapter file %s created successfully.\n", filename);
-
-    return file;
-}
-void writeIDTitle(char *line) {
-    char chapter_id[50];
-    char chapter_title[256];
-
-    // Check if the line is a chapter
-    if (is_new_chapter(line, chapter_id, chapter_title)) {
-        
-        FILE *file = fopen(chapter_title, "a");
-        if (file == NULL) {
-            perror("Failed to open file");
-            return;
-        }
-
-        // Write in HTML-like format
-        fprintf(file, "<h1><a href=\"#%s\">%s</a></h1>\n", chapter_id, chapter_title);
-        fclose(file);
-    }
-}*/
 FILE* start_chapter( char *line) {
     char chapter_id[50];
     char chapter_title[256];
 
-    // Check if the line is a chapter and extract info
+    //check if the line is a chapter and extract info
     if (!is_new_chapter(line, chapter_id, chapter_title)) {
         return NULL; // Not a chapter, skip
     }
 
-    // Create the file name like "ch01.html"
+    //create the file name like "ch01.html"
     char filename[64];
-    snprintf(filename, sizeof(filename), "%s.html", chapter_id);
+    snprintf(filename, sizeof(filename), "export/%s.html", chapter_id);
 
-    // Open the file for writing
+    //open the file for writing
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
         fprintf(stderr, "Erreur : impossible de créer le fichier %s\n", filename);
         return NULL;
     }
 
-    // Write the HTML header
+    //write the HTML header
     fprintf(file,
         "<!DOCTYPE html>\n"
         "<html lang=\"fr\">\n"
         "<head>\n"
         "  <meta charset=\"UTF-8\">\n"
-        "  <title>%s</title>\n"
+        "  <title> %s</title>\n"
         "  <link rel=\"stylesheet\" href=\"style.css\">\n"
         "</head>\n"
         "<body>\n"
-        "  <h1 id=\"%s\">%s</h1>\n",
-        chapter_title, chapter_id, chapter_title
+        "  <h1 id=\"id%s\">%s-%s</h1>\n",
+        chapter_title, chapter_id, chapter_id, chapter_title
     );
-/*
-    // Optional: also append to a table of contents
-    FILE *toc = fopen("book.html", "a");
-    if (toc) {
-        fprintf(toc, "<h2><a href=\"%s\">%s</a></h2>\n", filename, chapter_title);
-        fclose(toc);
-    }*/
-
     return file;
+}
+
+
+void process_paragraphs(FILE* input, FILE* chapter_file) {
+    char line[512];
+    while (fgets(line, sizeof(line), input)) {
+        if (is_new_chapter(line, NULL, NULL)) {
+            fseek(input, -strlen(line), SEEK_CUR); //moves the pointer to the previous line
+            break;
+        }
+        char* start = strstr(line, "<p>");
+        char* end = strstr(line, "</p>");
+        if (start && end && end > start) {
+            start += strlen("<p>");
+            char contenu[512];
+            size_t len = end - start;
+            strncpy(contenu, start, len);
+            contenu[len] = '\0';
+            fprintf(chapter_file, "<p class=\"paragraph\">%s</p>\n", contenu);
+        }
+    }
 }
