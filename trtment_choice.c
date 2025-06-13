@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-//<choice idref="03">Vous dirigez vers l’Est, où un ancien château a été aperçu par les voyageurs. <a>Chapitre 3</a></choice>
+//<choice idref="03">Vous dirigez vers l’Est, où un ancien château a été aperçu par les voyageurs. <a>Chapitre 3</a></choice
 
 
 void lire_choice(const char* filename){
@@ -59,7 +59,7 @@ void afficher_txt(const char* txt) {
     printf("<choice>");
     for (int i = 0; txt[i]; ++i) {
         if (txt[i] == '\n') {
-            putchar(' ');
+            putchar(' \n');
         } else {
             putchar(txt[i]);
         }
@@ -115,7 +115,7 @@ void get_titre_chapter(const char* filename) {
         char* end = strstr(line, "</a>");
         if (start && end && end > start) {
             start += 3; // avance après <a>
-            size_t len = end - start;
+            int len = end - start;
             char titre_chapter[512];
             strncpy(titre_chapter, start, len);
             titre_chapter[len] = '\0';
