@@ -25,4 +25,3 @@ void read_chapter(const char* file_name){
     }
 
 }
-
