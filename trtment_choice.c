@@ -25,8 +25,8 @@ void lire_choice(const char* filename){
 }
 
 
-void affichere_idref(const char* txt, const char* titre_chapter) {
-    printf("<choice idref=\"%d\">", idref);
+void affichere_idref(int idref, const char* txt, const char* titre_chapter) {
+    printf("<choice idref=\"%d\">",idref);
     for (size_t i = 0; txt[i]; ++i) {
         if (txt[i] == '\n') {
             putchar(' ');
@@ -69,22 +69,23 @@ void afficher_titre_chapter(const char* titre_chapter){
     for(int i = 0; titre_chapter[i]; i++){
         if(titre_chapter[i] == "\n"){
             putchar(" ");
-        } eles{
+        } else{
             putchar(titre_chapter[i]);
         }
     }
-    printf("</a>")
+    printf("</a>");
 }
 
 
-void get_titre_chapter(const char* titre_chapter){
-    char* start = strstr(titre_chapter, "<a>");
-    char* end = strstr(titre_chapter, "</a>");
+void get_titre_chapter(const char* line, char* out_titre_chapter){
+    char* start = strstr(line, "<a>");
+    char* end = strstr(line, "</a>");
     if (start && end && end > start) {
         start += 3; // avance après <a>
         int len = end - start;
-        strncpy(titre_chapter, start, len);
-        titre_chapter[len] = '\0';
+        strncpy(out_titre_chapter, start, len);
+        out_titre_chapter[len] = '\0';
+    } else {
+        out_titre_chapter[0] = '\0';
     }
-
 }
