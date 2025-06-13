@@ -124,6 +124,3 @@ FILE* start_chapter( char *line) {
 
     return file;
 }
-
-
-
