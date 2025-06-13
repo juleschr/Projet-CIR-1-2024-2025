@@ -18,7 +18,7 @@ void lire_p(const char* filename){
     while(fgets(line, sizeof(line), file)){    // tant que l'on lis bien la ligne <p>
         if(strstr("<p>",line)){ // verifie si la ligne contient la balise p
             char txt[512];
-            sscanf(line,"<p\"%d\">%[^>]s",txt); // extrait l'id et le titre de la balise chapter
+            sscanf(line,"<\"%d\">%[^>]s",txt);
         }
     }
 
@@ -51,7 +51,7 @@ void get_p(const char* filename) {
         char* end = strstr(line, "</p>");
         if (start && end && end > start) {
             start += 3; // avance après <p>
-            char contenu[1024];
+            char contenu[512];
             size_t len = end - start;
             strncpy(contenu, start, len);
             contenu[len] = '\0';

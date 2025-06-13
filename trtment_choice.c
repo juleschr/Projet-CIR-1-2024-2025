@@ -19,10 +19,72 @@ void lire_choice(const char* filename){
             char titre_chapter[512];
             int idref = 00;
             scanf(line, "<choice idref=\"%d\">%[^<]<a>%[^<]</a></choice>", &idref, txt, titre_chapter);
-            
+
         }
     }
 }
 
 
-void afficher_txt(const char){}
+void affichere_idref(const char* txt, const char* titre_chapter) {
+    printf("<choice idref=\"%d\">", idref);
+    for (size_t i = 0; txt[i]; ++i) {
+        if (txt[i] == '\n') {
+            putchar(' ');
+        } else {
+            putchar(txt[i]);
+        }
+    }
+    printf("<a>%s</a></choice>\n", titre_chapter);
+}
+
+void get_idref(const char* line, int* idref) {
+    sscanf(line, "<choice idref=\"%d\">", idref);
+}
+
+void afficher_txt(const char* txt) {
+    printf("<choice>");
+    for (int i = 0; txt[i]; ++i) {
+        if (txt[i] == '\n') {
+            putchar(' ');
+        } else {
+            putchar(txt[i]);
+        }
+    }
+    printf("</choice>\n");
+}
+
+void get_txt(const char* line, char* txt) {
+    char* start = strstr(line, "<choice>");
+    char* end = strstr(line, "</choice>");
+    if (start && end && end > start) {
+        start += 8; // avance après <choice>
+        int len = end - start;
+        strncpy(txt, start, len);
+        txt[len] = '\0';
+    }
+}
+
+void afficher_titre_chapter(const char* titre_chapter){
+    printf("<a>");
+    for(int i = 0; titre_chapter[i]; i++){
+        if(titre_chapter[i] == "\n"){
+            putchar(" ");
+        } eles{
+            putchar(titre_chapter[i]);
+        }
+    }
+    printf("</a>")
+}
+
+
+void get_titre_chapter(const char* titre_chapter){
+    char* start = strstr(titre_chapter, "<a>");
+    char* end = strstr(titre_chapter, "</a>");
+    if (start && end && end > start) {
+        start += 3; // avance après <a>
+        int len = end - start;
+        strncpy(titre_chapter, start, len);
+        titre_chapter[len] = '\0';
+    }
+
+}
