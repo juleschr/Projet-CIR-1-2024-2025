@@ -7,5 +7,8 @@
 #include <stdbool.h>
 
 int is_new_chapter(char *line , char *chapter_id, char *chapter_title);
+//void writeIDTitle(char *line);
+FILE* start_chapter(char *line);
+void end_chapter(FILE* file);
 
 #endif // FUNCTIONS_H
