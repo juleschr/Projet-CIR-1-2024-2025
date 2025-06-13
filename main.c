@@ -18,7 +18,7 @@ int main() {
        
        if (is_new_chapter(line, chapter_id, chapter_title)) {
            FILE *chapter_file = start_chapter(line);
-        
+           process_paragraphs(input , chapter_file);
            end_chapter(chapter_file);
            printf("LINE: %s\n", line);
        }
