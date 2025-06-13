@@ -37,9 +37,23 @@ void affichere_idref(int idref, const char* txt, const char* titre_chapter) {
     printf("<a>%s</a></choice>\n", titre_chapter);
 }
 
-void get_idref(const char* line, int* idref) {
-    sscanf(line, "<choice idref=\"%d\">", idref);
+void get_idref(const char* filename) {
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        perror("error while opening the file ");
+        return;
+    }
+    char line[512];
+    while (fgets(line, sizeof(line), file)) {
+        int idref = 0;
+        sscanf(line, "<choice idref=\"%d\">", &idref);
+        affichere_idref(idref, "", ""); // Affiche juste l'idref 
+    }
+    fclose(file);
 }
+    
+
+
 
 void afficher_txt(const char* txt) {
     printf("<choice>");
@@ -53,16 +67,27 @@ void afficher_txt(const char* txt) {
     printf("</choice>\n");
 }
 
-void get_txt(const char* line, char* txt) {
-    char* start = strstr(line, "<choice>");
-    char* end = strstr(line, "</choice>");
-    if (start && end && end > start) {
-        start += 8; // avance après <choice>
-        int len = end - start;
-        strncpy(txt, start, len);
-        txt[len] = '\0';
+void get_txt(const char* filename) {
+    char txt[512];
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        perror("error while opening the file ");
+        return;
     }
+    char line[512];
+    while (fgets(line, sizeof(line), file)) {
+        char* start = strchr(line, '>');
+        char* a_tag = strstr(line, "<a>");
+        if (start && a_tag && a_tag > start) {
+            size_t len = a_tag - (start + 1);
+            strncpy(txt, start + 1, len);
+            txt[len] = '\0';
+            afficher_txt(txt);
+        }
+    }
+    fclose(file);
 }
+
 
 void afficher_titre_chapter(const char* titre_chapter){
     printf("<a>");
@@ -77,15 +102,37 @@ void afficher_titre_chapter(const char* titre_chapter){
 }
 
 
-void get_titre_chapter(const char* line, char* out_titre_chapter){
-    char* start = strstr(line, "<a>");
-    char* end = strstr(line, "</a>");
-    if (start && end && end > start) {
-        start += 3; // avance après <a>
-        int len = end - start;
-        strncpy(out_titre_chapter, start, len);
-        out_titre_chapter[len] = '\0';
-    } else {
-        out_titre_chapter[0] = '\0';
+void get_titre_chapter(const char* filename) {
+
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        perror("error while opening the file ");
+        return;
     }
+    char line[512];
+    while (fgets(line, sizeof(line), file)) {
+        char* start = strstr(line, "<a>");
+        char* end = strstr(line, "</a>");
+        if (start && end && end > start) {
+            start += 3; // avance après <a>
+            size_t len = end - start;
+            char titre_chapter[512];
+            strncpy(titre_chapter, start, len);
+            titre_chapter[len] = '\0';
+            afficher_titre_chapter(titre_chapter);
+        }
+    }
+    fclose(file);
+}
+   
+
+void main(){
+    lire_choice("book.txt");
+    printf("-----------------------idref-------------------------\n");
+    get_idref("book.txt");
+    printf("-----------------------titre_chapter-----------------\n");
+    get_titre_chapter("book.txt");
+    printf("-----------------------txt---------------------------\n");
+    get_txt("book.txt");
+
 }
