@@ -66,4 +66,4 @@ int main() {
     const char* filename = "book.txt";  // Nom du fichier texte à traiter
     convert_choices_to_html(filename);    // Lancement de la conversion
     return 0;
-}
+};
