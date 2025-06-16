@@ -12,7 +12,9 @@ int is_new_chapter(char *line ,char* chapter_id , char* chapter_title) {
     }
     return 0;
 }
-
+int is_end_of_chapter(char *line) {
+    return strstr(line, "</chapter>") != NULL;
+}
 
 
 
@@ -68,7 +70,20 @@ FILE* start_chapter( char *line) {
     return file;
 }
 
+void process_paragraphs(char* line, FILE* chapter_file) {
+    char* start = strstr(line, "<p>");
+    char* end = strstr(line, "</p>");
+    if (start && end && end > start) {
+        start += strlen("<p>");
+        char contenu[512];
+        size_t len = end - start;
+        strncpy(contenu, start, len);
+        contenu[len] = '\0';
+        fprintf(chapter_file, "<p class=\"paragraph\">%s</p>\n", contenu);
+    }
+}
 
+/*
 void process_paragraphs(FILE* input, FILE* chapter_file) {
     char line[512];
     while (fgets(line, sizeof(line), input)) {
@@ -87,4 +102,4 @@ void process_paragraphs(FILE* input, FILE* chapter_file) {
             fprintf(chapter_file, "<p class=\"paragraph\">%s</p>\n", contenu);
         }
     }
-}
+}*/

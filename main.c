@@ -6,26 +6,36 @@
 #define LINE_SIZE 512
 
 int main() {
-   
     FILE* input = fopen("book.txt", "r");
+    if (input == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
     char line[512];
     char chapter_id[50];
     char chapter_title[256];
+    FILE *chapter_file = NULL;
 
-    
-
-   while (fgets(line, sizeof(line), input)) {
-       
-       if (is_new_chapter(line, chapter_id, chapter_title)) {
-           FILE *chapter_file = start_chapter(line);
-           process_paragraphs(input , chapter_file);
-           end_chapter(chapter_file);
-           printf("LINE: %s\n", line);
-       }
-   }
+    while (fgets(line, sizeof(line), input)) {
+        if (is_new_chapter(line, chapter_id, chapter_title)) {
+            chapter_file = start_chapter(line);
+        }
+        else if (is_end_of_chapter(line)) {
+            end_chapter(chapter_file);
+            chapter_file = NULL;
+        }
+        else if (chapter_file != NULL) {
+            if (strstr(line, "<p>") != NULL) {
+                process_paragraphs(line, chapter_file); // Pass the line directly
+            }
+            else if (strstr(line, "<choice") != NULL) {
+                process_choice_line(line, chapter_file); // Pass chapter_file if needed
+            }
+        }
+    }
 
     fclose(input);
-
     return 0;
+
 
 }
