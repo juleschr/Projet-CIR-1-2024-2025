@@ -6,85 +6,26 @@
 //<choice idref="03">Vous dirigez vers l’Est, où un ancien château a été aperçu par les voyageurs. <a>Chapitre 3</a></choice>
 
 
-void lire_choice(const char* filename){
-    FILE* file = fopen(filename, "r");
-    if(!file){
-        perror("error while opening the file ");
-    }
-    char line[512];
+#include <stdio.h>
+#include <string.h>
 
-    while (fgets(line, sizeof(line), file)){
-        if(strstr("<choice idref",line)){
-            char txt[512];
-            char titre_chapter[512];
-            int idref = 00;
-            scanf(line, "<choice idref=\"%d\">%[^<]<a>%[^<]</a></choice>", &idref, txt, titre_chapter);
+int main() {
+    // Contenu XML d'entrée
+    const char *id = "03";
+    const char *title = "Le furie nocturne";
+    const char *para1 = "Harold arrive dans la clairière et découvre un dragon.";
+    const char *para2 = "Il s'agit d'un furie nocturne visiblement blessé.";
+    const char *choice1_text = "S'approcher de Krokmou";
+    const char *choice1_href = "04";
+    const char *choice2_text = "S'enfuir en courant";
+    const char *choice2_href = "05";
 
-        }
-    }
-}
+    // Génération du HTML
+    printf("<h1>%s</h1>\n", title);
+    printf("<p>%s</p>\n", para1);
+    printf("<p>%s</p>\n", para2);
+    printf("<p>%s <a href=\"%s.html\">Chapitre %s</a></p>\n", choice1_text, choice1_href, choice1_href);
+    printf("<p>%s <a href=\"%s.html\">Chapitre %s</a></p>\n", choice2_text, choice2_href, choice2_href);
 
-
-void affichere_idref(const char* txt, const char* titre_chapter) {
-    printf("<choice idref=\"%d\">", idref);
-    for (size_t i = 0; txt[i]; ++i) {
-        if (txt[i] == '\n') {
-            putchar(' ');
-        } else {
-            putchar(txt[i]);
-        }
-    }
-    printf("<a>%s</a></choice>\n", titre_chapter);
-}
-
-void get_idref(const char* line, int* idref) {
-    sscanf(line, "<choice idref=\"%d\">", idref);
-}
-
-void afficher_txt(const char* txt) {
-    printf("<choice>");
-    for (int i = 0; txt[i]; ++i) {
-        if (txt[i] == '\n') {
-            putchar(' ');
-        } else {
-            putchar(txt[i]);
-        }
-    }
-    printf("</choice>\n");
-}
-
-void get_txt(const char* line, char* txt) {
-    char* start = strstr(line, "<choice>");
-    char* end = strstr(line, "</choice>");
-    if (start && end && end > start) {
-        start += 8; // avance après <choice>
-        int len = end - start;
-        strncpy(txt, start, len);
-        txt[len] = '\0';
-    }
-}
-
-void afficher_titre_chapter(const char* titre_chapter){
-    printf("<a>");
-    for(int i = 0; titre_chapter[i]; i++){
-        if(titre_chapter[i] == "\n"){
-            putchar(" ");
-        } eles{
-            putchar(titre_chapter[i]);
-        }
-    }
-    printf("</a>")
-}
-
-
-void get_titre_chapter(const char* titre_chapter){
-    char* start = strstr(titre_chapter, "<a>");
-    char* end = strstr(titre_chapter, "</a>");
-    if (start && end && end > start) {
-        start += 3; // avance après <a>
-        int len = end - start;
-        strncpy(titre_chapter, start, len);
-        titre_chapter[len] = '\0';
-    }
-
+    return 0;
 }
