@@ -3,41 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-//<choice idref="03">Vous dirigez vers l’Est, où un ancien château a été aperçu par les voyageurs. <a>Chapitre 3</a></choice
-
-
-void lire_choice(const char* filename){
-    FILE* file = fopen(filename, "r");
-    if(!file){
-        perror("error while opening the file ");
-    }
-    char line[512];
-
-    while (fgets(line, sizeof(line), file)){
-        if(strstr("<choice idref",line)){
-            char txt[512];
-            char titre_chapter[512];
-            int idref = 00;
-            scanf(line, "<choice idref=\"%d\">%[^<]<a>%[^<]</a></choice>", &idref, txt, titre_chapter);
-
-        }
-    }
-}
-
-
-void affichere_idref(int idref, const char* txt, const char* titre_chapter) {
-    printf("<choice idref=\"%d\">",idref);
-    for (size_t i = 0; txt[i]; ++i) {
-        if (txt[i] == '\n') {
-            putchar(' ');
-        } else {
-            putchar(txt[i]);
-        }
-    }
-    printf("<a>%s</a></choice>\n", titre_chapter);
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define MAX_LINE 512
 
@@ -76,102 +41,29 @@ void process_choice_line(const char *line) {
     printf("<p>%s <a href=\"%s.html\">%s</a></p>\n", texte, idref, chapitre);
 }
 
-void get_idref(const char* filename) {
-    FILE* file = fopen(filename, "r");
+// Fonction principale qui lit le fichier et traite chaque ligne
+void convert_choices_to_html(const char* filename) {
+    FILE *file = fopen(filename, "r");  // Ouvre le fichier en lecture
     if (!file) {
-        perror("error while opening the file ");
+        perror("Erreur d'ouverture du fichier");
         return;
     }
-    char line[512];
+
+    char line[MAX_LINE];
+    // Lecture du fichier ligne par ligne
     while (fgets(line, sizeof(line), file)) {
-        int idref = 0;
-        sscanf(line, "<choice idref=\"%d\">", &idref);
-        affichere_idref(idref, "", ""); // Affiche juste l'idref 
-    }
-    fclose(file);
-}
-    
-
-
-
-void afficher_txt(const char* txt) {
-    printf("<choice>");
-    for (int i = 0; txt[i]; ++i) {
-        if (txt[i] == '\n') {
-            putchar(' \n');
-        } else {
-            putchar(txt[i]);
+        // Si la ligne contient une balise <choice>, on la traite
+        if (strstr(line, "<choice") != NULL) {
+            process_choice_line(line);
         }
     }
-    printf("</choice>\n");
+
+    fclose(file); // Fermeture du fichier
 }
 
-void get_txt(const char* filename) {
-    char txt[512];
-    FILE* file = fopen(filename, "r");
-    if (!file) {
-        perror("error while opening the file ");
-        return;
-    }
-    char line[512];
-    while (fgets(line, sizeof(line), file)) {
-        char* start = strchr(line, '>');
-        char* a_tag = strstr(line, "<a>");
-        if (start && a_tag && a_tag > start) {
-            size_t len = a_tag - (start + 1);
-            strncpy(txt, start + 1, len);
-            txt[len] = '\0';
-            afficher_txt(txt);
-        }
-    }
-    fclose(file);
-}
-
-
-void afficher_titre_chapter(const char* titre_chapter){
-    printf("<a>");
-    for(int i = 0; titre_chapter[i]; i++){
-        if(titre_chapter[i] == "\n"){
-            putchar(" ");
-        } else{
-            putchar(titre_chapter[i]);
-        }
-    }
-    printf("</a>");
-}
-
-
-void get_titre_chapter(const char* filename) {
-
-    FILE* file = fopen(filename, "r");
-    if (!file) {
-        perror("error while opening the file ");
-        return;
-    }
-    char line[512];
-    while (fgets(line, sizeof(line), file)) {
-        char* start = strstr(line, "<a>");
-        char* end = strstr(line, "</a>");
-        if (start && end && end > start) {
-            start += 3; // avance après <a>
-            int len = end - start;
-            char titre_chapter[512];
-            strncpy(titre_chapter, start, len);
-            titre_chapter[len] = '\0';
-            afficher_titre_chapter(titre_chapter);
-        }
-    }
-    fclose(file);
-}
-   
-
-void main(){
-    lire_choice("book.txt");
-    printf("-----------------------idref-------------------------\n");
-    get_idref("book.txt");
-    printf("-----------------------titre_chapter-----------------\n");
-    get_titre_chapter("book.txt");
-    printf("-----------------------txt---------------------------\n");
-    get_txt("book.txt");
-
+// Programme principal
+int main() {
+    const char* filename = "book.txt";  // Nom du fichier texte à traiter
+    convert_choices_to_html(filename);    // Lancement de la conversion
+    return 0;
 }
