@@ -9,7 +9,7 @@ function attaque(vie_cible, atk, CD) {
         let lancer_D8 = Math.floor(Math.random() * 8) + 1;
         let degats_infliger = Math.max((lancer_D8 * 2) - CD + atk, 0);
         vie_cible = vie_cible - degats_infliger;
-        console.log(`Attaque réussie ! Dégâts infligés : ${degats_infliger}`);
+        console.log("Attaque réussie ! Dégâts infligés : ${degats_infliger}");
     } else {
         console.log("Attaque ratée !");
     }
@@ -28,7 +28,7 @@ function defense(vie_defenseur, def, CD) {
         let lancer_D6 = Math.floor(Math.random() * 6) + 1;
         let vie_recuperee = Math.max((lancer_D6 * 2) - CD + def, 0);
         vie_defenseur = vie_defenseur + vie_recuperee;
-        console.log(`Défense réussie ! Vie récupérée : ${vie_recuperee}`);
+        console.log("Défense réussie ! Vie récupérée : ${vie_recuperee}");
     } else {
         console.log("L'attaque n'est pas parvenue à percer la défense de l'adversaire");
     }
@@ -175,7 +175,7 @@ function fenetrecombat(){
         <canvas id="arena-canvas" width="400" height="120"></canvas>
         <div id="combat-ui">
             <div class="stat-block" id="hero-stats">
-                <img src="img/hero.png" alt="Héros">
+                <img src="images/hero.jpg" alt="Héros">
                 <div class="name">Héros</div>
                 <div class="stat" id="hero-vie">Vie : 10</div>
                 <div class="stat" id="hero-atk">ATK : 5</div>
@@ -183,7 +183,7 @@ function fenetrecombat(){
                 <div class="stat" id="hero-cd-def">CD DEF : 10</div>
             </div>
             <div class="stat-block" id="enemy-stats">
-                <img src="https://cdn.pixabay.com/photo/2013/07/13/12/46/orc-146063_1280.png" alt="Ennemi">
+                <img src="images/enemie.jpg" alt="Ennemi">
                 <div class="name">Ennemi</div>
                 <div class="stat" id="enemy-vie">Vie : 5</div>
                 <div class="stat" id="enemy-atk">ATK : 4</div>
@@ -192,7 +192,144 @@ function fenetrecombat(){
             </div>
         </div>
     `);
+    // Fonction pour animer le lancer de dé au centre de l'arène
+    async function animateDiceRoll(type, result) {
+        // type: "D20", "D8", "D6"
+        // result: valeur finale à afficher
+        // S'assure que le canvas garde la bonne taille même en plein écran
+        function resizeCanvas() {
+            const canvas = combatWindow.document.getElementById('arena-canvas');
+            if (!canvas) return;
+            // Largeur responsive, mais hauteur fixe pour garder la zone centrale
+            let width = Math.min(600, combatWindow.innerWidth - 40);
+            if (width < 320) width = 320;
+            canvas.width = width;
+            canvas.height = 120;
+        }
+        resizeCanvas();
+        combatWindow.addEventListener('resize', resizeCanvas);
+        const canvas = combatWindow.document.getElementById('arena-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const diceX = canvas.width / 2;
+        const diceY = canvas.height / 2 + 10;
+        const diceSize = 38;
 
+        // Efface la zone centrale
+        function clearDice() {
+            ctx.clearRect(diceX - diceSize, diceY - diceSize, diceSize * 2, diceSize * 2);
+        }
+
+        // Dessine un dé simple (carré ou octogone) avec une valeur
+        function drawDice(val, highlight = false) {
+            clearDice();
+            ctx.save();
+            ctx.translate(diceX, diceY);
+
+            // Forme du dé selon le type
+            ctx.beginPath();
+            if (type === "D20") {
+                // Icône pentagone étoilé pour D20
+                for (let i = 0; i < 5; i++) {
+                    ctx.lineTo(
+                        Math.cos((18 + i * 72) * Math.PI / 180) * diceSize,
+                        Math.sin((18 + i * 72) * Math.PI / 180) * diceSize
+                    );
+                }
+            } else if (type === "D8") {
+                // Octogone pour D8
+                for (let i = 0; i < 8; i++) {
+                    ctx.lineTo(
+                        Math.cos((22.5 + i * 45) * Math.PI / 180) * diceSize,
+                        Math.sin((22.5 + i * 45) * Math.PI / 180) * diceSize
+                    );
+                }
+            } else {
+                // Carré pour D6
+                ctx.rect(-diceSize, -diceSize, diceSize * 2, diceSize * 2);
+            }
+            ctx.closePath();
+            ctx.fillStyle = highlight ? "#ffd700" : "#fff";
+            ctx.globalAlpha = 0.92;
+            ctx.shadowColor = "#000";
+            ctx.shadowBlur = highlight ? 16 : 6;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = "#222";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Texte du résultat
+            ctx.fillStyle = "#222";
+            ctx.font = "bold 24px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(val, 0, 2);
+
+            ctx.restore();
+        }
+
+        // Animation de roulement
+        let frames = 18 + Math.floor(Math.random() * 6);
+        let lastVal = 1;
+        for (let i = 0; i < frames; i++) {
+            let val;
+            if (type === "D20") val = Math.floor(Math.random() * 20) + 1;
+            else if (type === "D8") val = Math.floor(Math.random() * 8) + 1;
+            else val = Math.floor(Math.random() * 6) + 1;
+            lastVal = val;
+            drawDice(val, false);
+            await new Promise(r => setTimeout(r, 40 + i * 4));
+        }
+        // Affiche le résultat final en surbrillance
+        drawDice(result, true);
+        await new Promise(r => setTimeout(r, 650));
+        clearDice();
+    }
+
+    // On intercepte les lancers de dés dans attaque/defense pour l'animation
+    // On redéfinit temporairement Math.random pour capturer la valeur du dé
+    function getDiceRoll(type, min, max) {
+        // type: "D20", "D8", "D6"
+        let val = Math.floor(Math.random() * (max - min + 1)) + min;
+        animateDiceRoll(type, val);
+        return val;
+    }
+
+    // Patch temporaire des fonctions attaque/defense pour utiliser l'animation
+    const oldAttaque = attaque;
+    attaque = function(vie_cible, atk, CD) {
+        if (vie_cible <= 0) return 0;
+        let lancer_D20 = getDiceRoll("D20", 1, 20);
+        let attaque_reussie = lancer_D20 + atk;
+        if (attaque_reussie >= CD) {
+            let lancer_D8 = getDiceRoll("D8", 1, 8);
+            let degats_infliger = Math.max((lancer_D8 * 2) - CD + atk, 0);
+            vie_cible = vie_cible - degats_infliger;
+            console.log(`Attaque réussie ! Dégâts infligés : ${degats_infliger}`);
+        } else {
+            console.log("Attaque ratée !");
+        }
+        return Math.max(vie_cible, 0);
+    };
+
+    const oldDefense = defense;
+    defense = function(vie_defenseur, def, CD) {
+        if (vie_defenseur <= 0) return 0;
+        let lancer_D20 = getDiceRoll("D20", 1, 20);
+        let defense_reussie = lancer_D20 + def;
+        console.log(defense_reussie);
+        if (defense_reussie >= CD) {
+            let lancer_D6 = getDiceRoll("D6", 1, 6);
+            let vie_recuperee = Math.max((lancer_D6 * 2) - CD + def, 0);
+            vie_defenseur = vie_defenseur + vie_recuperee;
+            console.log(`Défense réussie ! Vie récupérée : ${vie_recuperee}`);
+        } else {
+            console.log("L'attaque n'est pas parvenue à percer la défense de l'adversaire");
+        }
+        return vie_defenseur;
+    };
     // Fonction pour mettre à jour les stats affichées
     function updateStats(vh, ah, cdh_atk, cdh_def, ve, ae, cde_atk, cde_def) {
         combatWindow.document.getElementById('hero-vie').textContent = `Vie : ${vh}`;
@@ -369,10 +506,28 @@ function fenetrecombat(){
         }
         console.log = originalLog;
     }
-
+    // Fermer la fenêtre à la fin du combat
+    // On surveille le log pour détecter la fin
+    const observer = new MutationObserver(() => {
+        const log = combatWindow.document.getElementById('log').textContent;
+        if (log.includes("Le héros a gagné !") || log.includes("L'ennemi a gagné !")) {
+            setTimeout(() => closeCombatWindow(), 1800);
+            observer.disconnect();
+        }
+    });
+    observer.observe(combatWindow.document.getElementById('log'), { childList: true, characterData: true, subtree: true });
     
 }
 
+function combat_result(){
+    const log = document.getElementById('log').textContent;
+    if (log.includes("Le héros a gagné !")) {
+        window.location.href = "7b.html";
+    } else if (log.includes("L'ennemi a gagné !")) {
+        window.location.href = "9.html";
+    }
+
+}
 
 function main(){
     
@@ -387,6 +542,7 @@ function main(){
         11, // CD_atk_enemie
         9   // CD_def_enemie
     );
+    combat_result();
 
 }
 
