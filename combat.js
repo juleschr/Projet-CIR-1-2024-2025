@@ -175,7 +175,7 @@ function fenetrecombat(){
         <canvas id="arena-canvas" width="400" height="120"></canvas>
         <div id="combat-ui">
             <div class="stat-block" id="hero-stats">
-                <img src="https://cdn.pixabay.com/photo/2014/04/03/10/32/knight-312588_1280.png" alt="Héros">
+                <img src="img/hero.png" alt="Héros">
                 <div class="name">Héros</div>
                 <div class="stat" id="hero-vie">Vie : 10</div>
                 <div class="stat" id="hero-atk">ATK : 5</div>
