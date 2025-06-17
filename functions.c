@@ -6,14 +6,11 @@
 
  // Check if the line contains "Chapter"
 int is_new_chapter(char *line ,char* chapter_id , char* chapter_title) {
-    if (strstr(line, "chapter") != NULL){
+    if (strstr(line, "<chapter") != NULL){
         sscanf(line, "<chapter id=\"%[^\"]\"> %[^\n]</chapter>", chapter_id, chapter_title);
         return 1;
     }
     return 0;
-}
-int is_end_of_chapter(char *line) {
-    return strstr(line, "</chapter>") != NULL;
 }
 
 
@@ -22,6 +19,7 @@ void end_chapter(FILE* file) {
     //printf("End chapter function began\n");
     if (file != NULL) {
         fprintf(file,
+            "<div id=\"character-display\"></div>\n"
             "  <hr>\n"
             "  <footer>\n"
             "    <p>&copy; Projet CIR1 – 2024/2025</p>\n"
@@ -30,7 +28,7 @@ void end_chapter(FILE* file) {
             "</html>\n"
         );
         fclose(file);
-        //printf("Chapter file closed successfully.\n");
+        printf("Chapter file closed successfully.\n");
     }
 }
 
@@ -61,7 +59,8 @@ FILE* start_chapter( char *line) {
         "<head>\n"
         "  <meta charset=\"UTF-8\">\n"
         "  <title> %s</title>\n"
-        "  <link rel=\"stylesheet\" href=\"style.css\">\n"
+        "  <link rel=\"stylesheet\" href=\"../style.css\">\n"
+         "  <script src=\"../character.js\"></script>\n"  
         "</head>\n"
         "<body>\n"
         "  <h1 id=\"id%s\">%s-%s</h1>\n",

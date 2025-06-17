@@ -20,7 +20,8 @@ int main() {
         if (is_new_chapter(line, chapter_id, chapter_title)) {
             chapter_file = start_chapter(line);
         }
-        else if (is_end_of_chapter(line)) {
+        else if (strstr(line, "<endchapter>") != NULL) {
+            printf("End of chapter detected: %s\n", chapter_id);
             end_chapter(chapter_file);
             chapter_file = NULL;
         }
@@ -29,7 +30,7 @@ int main() {
                 process_paragraphs(line, chapter_file); // Pass the line directly
             }
             else if (strstr(line, "<choice") != NULL) {
-                process_choice_line(line, chapter_file); // Pass chapter_file if needed
+                process_choice_line(line, chapter_file);
             }
         }
     }

@@ -14,5 +14,5 @@ void process_paragraphs(char *line, FILE* chapter_file);
 
 void process_choice_line( char *line , FILE *chapter_file);
 
-int is_end_of_chapter(char *line);
+//int is_end_of_chapter(char *line);
 #endif // FUNCTIONS_H
