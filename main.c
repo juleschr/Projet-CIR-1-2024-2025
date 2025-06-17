@@ -14,7 +14,7 @@ int main() {
     char line[512];
     char chapter_id[50];
     char chapter_title[256];
-    FILE *chapter_file = NULL;
+    FILE* chapter_file = NULL;
 
     while (fgets(line, sizeof(line), input)) {
         if (is_new_chapter(line, chapter_id, chapter_title)) {
