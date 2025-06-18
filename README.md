@@ -48,8 +48,7 @@ Le style est unifié via un fichier style.css commun à tous les chapitres.
 ├── book.txt                 
 ├── export/                
 ├── style.css              
-├── js/
-│   ├── character.js      
+├── js/     
 │   └── combat.js           
 └── README.md               
 
@@ -68,5 +67,5 @@ Le fichier book.txt est dans le répertoire courant.
 
 Le dossier export/ existe.
 
-Les fichiers style.css, character.js, et combat.js sont accessibles via les chemins définis dans le HTML généré.
+Les fichiers style.css et combat.js sont accessibles via les chemins définis dans le HTML généré.
 
