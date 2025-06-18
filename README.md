@@ -52,11 +52,11 @@ Le style est unifié via un fichier style.css commun à tous les chapitres.
 
 # compilation
 
-Compiler avec :
-gcc main.c functions.c -o livre
+Compiler grâce au Makefile vec :
+make
 
 Puis exécuter :
-./livre
+./main
 
 
 Pré-requis :
