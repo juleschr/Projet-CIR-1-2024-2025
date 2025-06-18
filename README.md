@@ -33,6 +33,9 @@ Les fichiers incluent une structure HTML complète (en-tête, contenu, pied de p
 Les paragraphes (<p>) sont extraits et affichés dans un bloc avec style CSS.
 Les choix (<choice>) sont transformés en liens permettant de naviguer vers d’autres chapitres.
 Les métadonnées (points de vie, objets, gains) peuvent être prises en compte pour enrichir l’interactivité.
+# A noter:
+Le fichier combat.v1.js contient le jeu de dé qu'on n'a pas réussit de lier aver le reste du projet, mais il est bien fonctionnel séparemment.
+
 
 # Intégration de scripts
 
