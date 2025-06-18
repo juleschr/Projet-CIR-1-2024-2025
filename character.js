@@ -99,12 +99,7 @@ function setupActionListeners() {
     });
 }
 
-window.onload = () => {
-    loadCharacterState();
-    displayCharacter();
-    updateChoices();
-    setupActionListeners();
-};
+
 
 
 /* summary
@@ -126,7 +121,7 @@ function displayCharacter() {
 
     charDiv.innerHTML = `
         <div class="character-section">
-            <img src="character.png" alt="Character Image">
+            <img src="character.jpeg" alt="Character Image">
             <div class="stats">
                 <h3>${character.name}</h3>
 
@@ -141,3 +136,9 @@ function displayCharacter() {
         </div>
     `;
 }
+window.onload = () => {
+    loadCharacterState();
+    displayCharacter();
+    updateChoices();
+    setupActionListeners();
+};

@@ -22,6 +22,7 @@ void end_chapter(FILE* file) {
             "<div id=\"character-display\"></div>\n"
             "  <hr>\n"
             "  <footer>\n"
+            "<br>\n"
             "    <p>&copy; Projet CIR1 – 2024/2025</p>\n"
             "  </footer>\n"
             "</body>\n"
@@ -60,10 +61,9 @@ FILE* start_chapter( char *line) {
         "  <meta charset=\"UTF-8\">\n"
         "  <title> %s</title>\n"
         "  <link rel=\"stylesheet\" href=\"../style.css\">\n"
-         "  <script src=\"../character.js\"></script>\n"
-         "   <div id=\"log\">%s</div>\n"
-         "<script>combat_result();</script>\n"  
-         "   <script src=\"../js/combat.js\"></script>\n                                             "
+       
+         "  <script src=\"../js/combat.js\" defer></script>\n"
+         
         "</head>\n"
         "<body>\n"
         "<div class=\"book\">\n"
