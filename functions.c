@@ -61,6 +61,7 @@ FILE* start_chapter( char *line) {
         "  <title> %s</title>\n"
         "  <link rel=\"stylesheet\" href=\"../style.css\">\n"
          "  <script src=\"../character.js\"></script>\n"  
+         "   <script src=\"../js/combat.js\"></script>\n                                             "
         "</head>\n"
         "<body>\n"
         "<div class=\"book\">\n"
