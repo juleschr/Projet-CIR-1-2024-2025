@@ -37,7 +37,7 @@ function displayCharacter() {
     for (let i = 0; i < character.lives; i++) {
         hearts += "❤️";
     }
-///////////here image
+
     charDiv.innerHTML = `
         <div class="character-section">
             <img src="../hero.jpeg" alt="Character Image">
@@ -139,8 +139,6 @@ function setupActionListeners() {
         });
         });  
 }
-
-
 // On page load
 window.onload = () => {
     loadCharacterState();

@@ -84,12 +84,5 @@ void process_choice_line(char *line, FILE *chapter_file) {
     "%s</button>\n",
     idref, gain, healthChange, lifeChange, combat, idref, texte);
 
-    /*fprintf(chapter_file,
-        "</div>\n"
-        "<button id=\"choice-%s\" data-gain=\"%s\" data-health=\"%d\" data-life=\"%d\" data-combat-result=\"%s\">"
-        "<a href=\"%s.html\">%s</a></button>\n",
-        idref, gain, healthChange, lifeChange, combatResult, idref, texte);*/
-    //Debugging output
-    printf("Processed choice: idref=%s, gain=%s, healthChange=%d, lifeChange=%d, combatResult=%s, texte=%s, chapitre=%s\n",
-    idref, gain, healthChange, lifeChange, combatResult, texte, chapitre);
+
 }
