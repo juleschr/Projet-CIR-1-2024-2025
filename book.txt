@@ -50,6 +50,7 @@
 
 <p>Vous canalisez toute votre énergie, frappant avec précision et courage. Une faiblesse dans l’armure de pierre du monstre apparaît — une fissure fine, juste sous son bras gauche. Vous y enfoncez votre lame, et un hurlement déchire l’air. Le monstre chancelle, puis s’effondre dans un fracas de roche brisée et de chair inerte.</p> <p>Essoufflé, couvert de sueur et de sang, vous vous tenez face à la porte de la salle secrète. Le chemin est libre. Vous poussez la porte, découvrant une pièce scintillante d’un éclat magique. Sur un piédestal repose le **Collier aux Sept Pierres**, irradiant une lumière surnaturelle.</p> <p>Vous vous en emparez, sentant un pouvoir ancien s’éveiller en vous. Le destin du royaume repose désormais entre vos mains.</p>
 <choice idref="10">Continuer votre quête avec le Collier aux Sept Pierres. <a>Chapitre 10</a></choice>
+<endchapter>
 
 <chapter id="08">Le Collier aux Sept Pierres</chapter>
 <p>Vous décidez de ne pas affronter directement le monstre, mais d’utiliser votre intelligence pour contourner le danger. Vous réussissez à atteindre la salle secrète et là, sur un piédestal de marbre, repose le Collier aux Sept Pierres. Une lumière douce émane de lui, et, sans hésiter, vous le saisissez.</p>

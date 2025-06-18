@@ -63,6 +63,7 @@ FILE* start_chapter( char *line) {
          "  <script src=\"../character.js\"></script>\n"  
         "</head>\n"
         "<body>\n"
+        "<div class=\"book\">\n"
         "  <h1 id=\"id%s\">%s-%s</h1>\n",
         chapter_title, chapter_id, chapter_id, chapter_title
     );
@@ -80,25 +81,6 @@ void process_paragraphs(char* line, FILE* chapter_file) {
         contenu[len] = '\0';
         fprintf(chapter_file, "<p class=\"paragraph\">%s</p>\n", contenu);
     }
+    
 }
 
-/*
-void process_paragraphs(FILE* input, FILE* chapter_file) {
-    char line[512];
-    while (fgets(line, sizeof(line), input)) {
-        if (is_new_chapter(line, NULL, NULL)) {
-            fseek(input, -strlen(line), SEEK_CUR); //moves the pointer to the previous line
-            break;
-        }
-        char* start = strstr(line, "<p>");
-        char* end = strstr(line, "</p>");
-        if (start && end && end > start) {
-            start += strlen("<p>");
-            char contenu[512];
-            size_t len = end - start;
-            strncpy(contenu, start, len);
-            contenu[len] = '\0';
-            fprintf(chapter_file, "<p class=\"paragraph\">%s</p>\n", contenu);
-        }
-    }
-}*/

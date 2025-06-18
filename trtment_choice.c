@@ -2,12 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "functions.h"
 #define MAX_LINE 1024
+
 void process_choice_line(char *line, FILE *chapter_file) {
     char idref[20];
     char texte[512];
@@ -44,14 +41,14 @@ void process_choice_line(char *line, FILE *chapter_file) {
         healthChange = atoi(health_start);
     }
 
-    // Extract life if present
+    //Extract life if present
     const char *life_start = strstr(line, "life=\"");
     if (life_start) {
         life_start += 6;
         lifeChange = atoi(life_start);
     }
 
-    // Extract combatResult if present
+    //extract combatResult if present
     const char *combat_start = strstr(line, "combatResult=\"");
     if (combat_start) {
         combat_start += 14;
@@ -71,25 +68,26 @@ void process_choice_line(char *line, FILE *chapter_file) {
     strncpy(texte, text_start, a_start - text_start);
     texte[a_start - text_start] = '\0';
 
-    // Extract chapter display (inside <a>...</a>)
+    //Extract chapter display (inside <a> tag)
     const char *chap_start = a_start + 3;
     const char *chap_end = strstr(chap_start, "</a>");
     if (!chap_end) return;
     strncpy(chapitre, chap_start, chap_end - chap_start);
     chapitre[chap_end - chap_start] = '\0';
 
-    // Write the final button into HTML
+    //Writing the final button into HTML
     fprintf(chapter_file,
+        "</div>\n"
         "<button id=\"choice-%s\" data-gain=\"%s\" data-health=\"%d\" data-life=\"%d\" data-combat-result=\"%s\">"
         "<a href=\"%s.html\">%s</a></button>\n",
         idref, gain, healthChange, lifeChange, combatResult, idref, texte);
-    // Debugging output
+    //Debugging output
     printf("Processed choice: idref=%s, gain=%s, healthChange=%d, lifeChange=%d, combatResult=%s, texte=%s, chapitre=%s\n",
            idref, gain, healthChange, lifeChange, combatResult, texte, chapitre);
 }
 
 /*
-// Fonction qui traite une ligne contenant une balise <choice>
+// Fonction qui traite une ligne contenant une balise <choice> ver1
 void process_choice_line(char *line, FILE *chapter_file) {
     printf("Processing choice line: %s", line); // Debugging output
     char idref[20];
