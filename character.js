@@ -4,10 +4,6 @@ let colors=[30362F,625834,A59132,FFFBDB,DA7422,]; //browns and white and orange
 */
 //the stats 
 
-
-/*For now ,let's focus on the backend elements and we'll do the style and the layout of the elemnts in the html pages later. So give me an implementation of the code that is going to create the character stats(name, health, lives, gains) 
-where gains is an array of the things the character can collect along the journey, along with all of the other functions for managing the stats and updating them .*/
-
 let character = {
     name: "Hero",
     health: 100,
